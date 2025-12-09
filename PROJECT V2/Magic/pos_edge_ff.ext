@@ -1,0 +1,155 @@
+timestamp 1764611478
+version 8.3
+tech scmos
+style TSMC0.18um(tsmc18)from:t11b
+scale 1000 1 9
+resistclasses 6700 7500 929000 929000 1 7700 7700 80 80 80 70 70 40
+node "gnd!" 9 58.0485 253 51 ndif 20 18 0 0 0 0 0 0 0 0 0 0 0 0 88 52 0 0 0 0 0 0 0 0 0 0
+node "storage_bar_gnd" 41 97.8558 225 51 ndc 40 36 0 0 0 0 0 0 0 0 0 0 0 0 172 94 0 0 0 0 0 0 0 0 0 0
+node "CLK" 89 182.461 247 35 pc 0 0 0 0 0 0 0 0 0 0 62 58 0 0 52 34 0 0 0 0 0 0 0 0 0 0
+node "gnd!" 9 88.9315 164 54 ndc 20 18 0 0 0 0 0 0 0 0 0 0 0 0 107 72 0 0 0 0 0 0 0 0 0 0
+node "CLK_bar" 89 206.692 123 39 pc 0 0 0 0 0 0 0 0 0 0 62 58 0 0 72 44 0 0 0 0 0 0 0 0 0 0
+node "gnd!" 9 88.9315 79 54 ndc 20 18 0 0 0 0 0 0 0 0 0 0 0 0 107 72 0 0 0 0 0 0 0 0 0 0
+node "gnd!" 9 58.0485 37 51 ndif 20 18 0 0 0 0 0 0 0 0 0 0 0 0 88 52 0 0 0 0 0 0 0 0 0 0
+node "neg_storage_bar_gnd" 41 97.8558 9 51 ndc 40 36 0 0 0 0 0 0 0 0 0 0 0 0 172 94 0 0 0 0 0 0 0 0 0 0
+node "CLK_bar" 89 182.461 31 35 pc 0 0 0 0 0 0 0 0 0 0 62 58 0 0 52 34 0 0 0 0 0 0 0 0 0 0
+node "vdd!" 13 41.6249 253 76 pdif 0 0 40 26 0 0 0 0 0 0 0 0 0 0 100 58 0 0 0 0 0 0 0 0 0 0
+node "FF_out" 22 176.821 232 51 ndif 20 18 40 26 0 0 0 0 0 0 0 0 0 0 276 146 0 0 0 0 0 0 0 0 0 0
+node "storage_bar_vdd" 48 64.6187 225 76 pdc 0 0 80 52 0 0 0 0 0 0 0 0 0 0 196 106 0 0 0 0 0 0 0 0 0 0
+node "vdd!" 13 69.4958 164 73 pdc 0 0 40 26 0 0 0 0 0 0 0 0 0 0 148 82 0 0 0 0 0 0 0 0 0 0
+node "node1" 89 188.555 86 54 ndif 40 36 80 52 0 0 0 0 0 0 0 0 0 0 344 180 0 0 0 0 0 0 0 0 0 0
+node "vdd!" 13 69.4958 79 73 pdc 0 0 40 26 0 0 0 0 0 0 0 0 0 0 148 82 0 0 0 0 0 0 0 0 0 0
+node "gnd!" 9 88.9315 -52 54 ndc 20 18 0 0 0 0 0 0 0 0 0 0 0 0 107 72 0 0 0 0 0 0 0 0 0 0
+node "CLK" 89 206.692 -93 39 pc 0 0 0 0 0 0 0 0 0 0 62 58 0 0 72 44 0 0 0 0 0 0 0 0 0 0
+node "gnd!" 9 88.9315 -137 54 ndc 20 18 0 0 0 0 0 0 0 0 0 0 0 0 107 72 0 0 0 0 0 0 0 0 0 0
+node "storage" 149 296.493 129 53 ndif 20 18 40 26 0 0 0 0 0 0 82 78 0 0 252 134 0 0 0 0 0 0 0 0 0 0
+node "storage_bar" 172 393.927 171 54 ndif 20 18 40 26 0 0 0 0 0 0 94 90 0 0 324 170 0 0 0 0 0 0 0 0 0 0
+node "CLK_bar" 120 187.286 247 99 pc 0 0 0 0 0 0 0 0 0 0 78 74 0 0 56 36 0 0 0 0 0 0 0 0 0 0
+node "vdd!" 13 41.6249 37 76 pdif 0 0 40 26 0 0 0 0 0 0 0 0 0 0 100 58 0 0 0 0 0 0 0 0 0 0
+node "a_16_51#" 149 399.825 16 51 ndif 20 18 40 26 0 0 0 0 0 0 82 78 0 0 384 200 0 0 0 0 0 0 0 0 0 0
+node "neg_storage_bar_vdd" 48 64.6187 9 76 pdc 0 0 80 52 0 0 0 0 0 0 0 0 0 0 196 106 0 0 0 0 0 0 0 0 0 0
+node "vdd!" 13 69.4958 -52 73 pdc 0 0 40 26 0 0 0 0 0 0 0 0 0 0 148 82 0 0 0 0 0 0 0 0 0 0
+node "neg_node1" 89 188.555 -130 54 ndif 40 36 80 52 0 0 0 0 0 0 0 0 0 0 344 180 0 0 0 0 0 0 0 0 0 0
+node "vdd!" 13 69.4958 -137 73 pdc 0 0 40 26 0 0 0 0 0 0 0 0 0 0 148 82 0 0 0 0 0 0 0 0 0 0
+node "neg_storage" 149 296.493 -87 53 ndif 20 18 40 26 0 0 0 0 0 0 82 78 0 0 252 134 0 0 0 0 0 0 0 0 0 0
+node "CLK" 131 222.134 123 96 pc 0 0 0 0 0 0 0 0 0 0 84 80 0 0 64 40 0 0 0 0 0 0 0 0 0 0
+node "neg_storage_bar" 172 393.927 -45 54 ndif 20 18 40 26 0 0 0 0 0 0 94 90 0 0 324 170 0 0 0 0 0 0 0 0 0 0
+node "CLK" 120 187.286 31 99 pc 0 0 0 0 0 0 0 0 0 0 78 74 0 0 56 36 0 0 0 0 0 0 0 0 0 0
+node "FF_in" 127 231.021 -136 61 pc 0 0 0 0 0 0 0 0 0 0 82 78 0 0 108 62 0 0 0 0 0 0 0 0 0 0
+node "CLK_bar" 131 222.134 -93 96 pc 0 0 0 0 0 0 0 0 0 0 84 80 0 0 64 40 0 0 0 0 0 0 0 0 0 0
+node "w_214_69#" 2118 1431.27 214 69 nw 0 0 0 0 1425 164 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "w_158_66#" 1010 577.53 158 66 nw 0 0 0 0 575 96 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "w_116_66#" 1106 527.31 116 66 nw 0 0 0 0 525 92 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "w_73_66#" 1010 577.53 73 66 nw 0 0 0 0 575 96 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "w_n2_69#" 2118 1431.27 -2 69 nw 0 0 0 0 1425 164 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "w_n58_66#" 1010 577.53 -58 66 nw 0 0 0 0 575 96 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "w_n100_66#" 1106 527.31 -100 66 nw 0 0 0 0 525 92 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "w_n143_66#" 1010 577.53 -143 66 nw 0 0 0 0 575 96 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+cap "w_n2_69#" "a_16_51#" 9.77901
+cap "w_n100_66#" "CLK_bar" 26.6634
+cap "FF_out" "gnd!" 27.5033
+cap "neg_storage_bar_vdd" "a_16_51#" 123.737
+cap "storage_bar_vdd" "FF_out" 123.737
+cap "storage" "gnd!" 56.5176
+cap "neg_storage_bar" "neg_storage_bar_gnd" 29.0252
+cap "CLK" "CLK_bar" 11.331
+cap "neg_storage" "CLK" 1.33222
+cap "w_n143_66#" "vdd!" 37.3693
+cap "CLK_bar" "FF_out" 0.160682
+cap "a_16_51#" "CLK_bar" 0.725203
+cap "storage" "vdd!" 1.6143
+cap "storage_bar" "storage_bar_vdd" 1.6143
+cap "CLK" "node1" 1.69614
+cap "neg_storage_bar" "neg_storage" 59.1013
+cap "neg_node1" "CLK" 1.33222
+cap "FF_in" "neg_node1" 59.1013
+cap "w_73_66#" "vdd!" 37.3693
+cap "node1" "CLK_bar" 1.33222
+cap "neg_storage" "neg_node1" 288.666
+cap "w_116_66#" "CLK" 26.6634
+cap "a_16_51#" "gnd!" 27.5033
+cap "w_214_69#" "FF_out" 9.77901
+cap "w_n2_69#" "neg_storage_bar" 21.1684
+cap "CLK_bar" "neg_storage_bar_gnd" 167.616
+cap "w_n58_66#" "vdd!" 37.3693
+cap "CLK" "gnd!" 2.6635
+cap "storage_bar" "storage" 59.1013
+cap "CLK" "a_16_51#" 0.160682
+cap "neg_storage_bar" "neg_storage_bar_vdd" 1.6143
+cap "w_158_66#" "storage" 21.086
+cap "w_214_69#" "storage_bar" 21.1684
+cap "w_116_66#" "node1" 9.23989
+cap "neg_storage_bar_gnd" "gnd!" 134.024
+cap "w_n2_69#" "neg_storage_bar_vdd" 42.8507
+cap "a_16_51#" "node1" 59.1013
+cap "FF_out" "storage_bar_gnd" 101.749
+cap "CLK" "storage" 1.69614
+cap "w_n2_69#" "vdd!" 22.1337
+cap "storage_bar" "gnd!" 82.4987
+cap "storage" "CLK_bar" 1.33222
+cap "w_n100_66#" "neg_storage" 9.29623
+cap "FF_in" "gnd!" 56.5176
+cap "CLK_bar" "CLK" 11.331
+cap "neg_storage_bar_vdd" "vdd!" 164.952
+cap "CLK_bar" "neg_storage" 1.69614
+cap "w_n143_66#" "FF_in" 21.086
+cap "storage_bar_vdd" "vdd!" 164.952
+cap "storage_bar" "storage_bar_gnd" 29.0252
+cap "w_n100_66#" "neg_node1" 9.23989
+cap "storage" "node1" 288.666
+cap "storage_bar" "vdd!" 123.737
+cap "w_158_66#" "vdd!" 37.3693
+cap "CLK_bar" "storage_bar_vdd" 79.0061
+cap "neg_node1" "gnd!" 82.4987
+cap "neg_storage" "gnd!" 56.5176
+cap "CLK_bar" "neg_node1" 1.69614
+cap "FF_in" "vdd!" 1.6143
+cap "w_116_66#" "storage" 9.29623
+cap "node1" "gnd!" 82.4987
+cap "w_n143_66#" "neg_node1" 9.40891
+cap "w_n58_66#" "neg_storage" 21.086
+cap "neg_storage_bar" "gnd!" 82.4987
+cap "a_16_51#" "neg_storage_bar_gnd" 101.749
+cap "w_214_69#" "storage_bar_vdd" 42.8507
+cap "storage_bar" "FF_out" 60.5552
+cap "CLK_bar" "vdd!" 2.4212
+cap "w_73_66#" "node1" 9.40891
+cap "w_n58_66#" "neg_storage_bar" 9.40891
+cap "w_n2_69#" "CLK" 28.8724
+cap "vdd!" "neg_node1" 123.737
+cap "neg_storage" "vdd!" 1.6143
+cap "vdd!" "node1" 123.737
+cap "w_214_69#" "vdd!" 22.1337
+cap "a_16_51#" "gnd!" 56.5176
+cap "CLK" "storage_bar_gnd" 167.616
+cap "neg_storage_bar" "vdd!" 123.737
+cap "w_158_66#" "storage_bar" 9.40891
+cap "CLK" "neg_storage_bar_vdd" 79.0061
+cap "w_214_69#" "CLK_bar" 28.8724
+cap "CLK_bar" "gnd!" 2.6635
+cap "w_73_66#" "a_16_51#" 21.086
+cap "storage_bar_gnd" "gnd!" 134.024
+cap "neg_storage_bar" "a_16_51#" 60.5552
+cap "a_16_51#" "vdd!" 1.6143
+cap "CLK" "vdd!" 2.4212
+cap "FF_out" "CLK" 0.725203
+fet nfet 251 51 252 52 8 12 "Gnd!" "CLK" 4 0 "storage_bar_gnd" 4 20,18 "gnd!" 4 20,18
+fet nfet 230 51 231 52 8 12 "Gnd!" "storage_bar" 4 0 "storage_bar_gnd" 4 20,18 "FF_out" 4 20,18
+fet nfet 169 54 170 55 8 12 "Gnd!" "storage" 4 0 "gnd!" 4 20,18 "storage_bar" 4 20,18
+fet nfet 127 53 128 54 8 12 "Gnd!" "CLK_bar" 4 0 "node1" 4 20,18 "storage" 4 20,18
+fet nfet 84 54 85 55 8 12 "Gnd!" "a_16_51#" 4 0 "gnd!" 4 20,18 "node1" 4 20,18
+fet nfet 35 51 36 52 8 12 "Gnd!" "CLK_bar" 4 0 "neg_storage_bar_gnd" 4 20,18 "gnd!" 4 20,18
+fet nfet 14 51 15 52 8 12 "Gnd!" "neg_storage_bar" 4 0 "neg_storage_bar_gnd" 4 20,18 "a_16_51#" 4 20,18
+fet pfet 251 76 252 77 16 20 "w_214_69#" "CLK_bar" 4 0 "storage_bar_vdd" 8 40,26 "vdd!" 8 40,26
+fet pfet 230 76 231 77 16 20 "w_214_69#" "storage_bar" 4 0 "storage_bar_vdd" 8 40,26 "FF_out" 8 40,26
+fet pfet 169 73 170 74 16 20 "w_158_66#" "storage" 4 0 "vdd!" 8 40,26 "storage_bar" 8 40,26
+fet pfet 127 73 128 74 16 20 "w_116_66#" "CLK" 4 0 "node1" 8 40,26 "storage" 8 40,26
+fet pfet 84 73 85 74 16 20 "w_73_66#" "a_16_51#" 4 0 "vdd!" 8 40,26 "node1" 8 40,26
+fet nfet -47 54 -46 55 8 12 "Gnd!" "neg_storage" 4 0 "gnd!" 4 20,18 "neg_storage_bar" 4 20,18
+fet nfet -89 53 -88 54 8 12 "Gnd!" "CLK" 4 0 "neg_node1" 4 20,18 "neg_storage" 4 20,18
+fet nfet -132 54 -131 55 8 12 "Gnd!" "FF_in" 4 0 "gnd!" 4 20,18 "neg_node1" 4 20,18
+fet pfet 35 76 36 77 16 20 "w_n2_69#" "CLK" 4 0 "neg_storage_bar_vdd" 8 40,26 "vdd!" 8 40,26
+fet pfet 14 76 15 77 16 20 "w_n2_69#" "neg_storage_bar" 4 0 "neg_storage_bar_vdd" 8 40,26 "a_16_51#" 8 40,26
+fet pfet -47 73 -46 74 16 20 "w_n58_66#" "neg_storage" 4 0 "vdd!" 8 40,26 "neg_storage_bar" 8 40,26
+fet pfet -89 73 -88 74 16 20 "w_n100_66#" "CLK_bar" 4 0 "neg_node1" 8 40,26 "neg_storage" 8 40,26
+fet pfet -132 73 -131 74 16 20 "w_n143_66#" "FF_in" 4 0 "vdd!" 8 40,26 "neg_node1" 8 40,26

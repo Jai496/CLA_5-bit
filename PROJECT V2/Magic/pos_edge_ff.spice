@@ -1,0 +1,154 @@
+* SPICE3 file created from pos_edge_ff.ext - technology: scmos
+
+.option scale=90n
+
+M1000 node1 a_16_51# vdd w_73_66# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1001 gnd CLK_bar neg_storage_bar_gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1002 vdd CLK neg_storage_bar_vdd w_n2_69# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1003 neg_node1 FF_in gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1004 neg_node1 FF_in vdd w_n143_66# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1005 storage CLK node1 w_116_66# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1006 neg_storage CLK_bar neg_node1 w_n100_66# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1007 FF_out storage_bar storage_bar_gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1008 FF_out storage_bar storage_bar_vdd w_214_69# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1009 neg_storage_bar neg_storage gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1010 a_16_51# neg_storage_bar neg_storage_bar_gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1011 gnd CLK storage_bar_gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1012 neg_storage_bar neg_storage vdd w_n58_66# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1013 a_16_51# neg_storage_bar neg_storage_bar_vdd w_n2_69# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1014 vdd CLK_bar storage_bar_vdd w_214_69# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1015 storage CLK_bar node1 Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1016 storage_bar storage gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1017 neg_storage CLK neg_node1 Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+M1018 storage_bar storage vdd w_158_66# CMOSP w=8 l=2
++  ad=40p pd=26u as=40p ps=26u
+M1019 node1 a_16_51# gnd Gnd CMOSN w=4 l=2
++  ad=20p pd=18u as=20p ps=18u
+C0 a_16_51# CLK 0
+C1 neg_node1 gnd 0.0825f
+C2 node1 CLK 0.0017f
+C3 storage_bar_vdd CLK_bar 0.07901f
+C4 w_158_66# vdd 0.03737f
+C5 w_214_69# FF_out 0.00978f
+C6 w_n2_69# neg_storage_bar 0.02117f
+C7 neg_storage_bar neg_storage 0.0591f
+C8 FF_in neg_node1 0.0591f
+C9 w_n100_66# CLK_bar 0.02666f
+C10 FF_out gnd 0.0275f
+C11 w_n2_69# a_16_51# 0.00978f
+C12 w_214_69# vdd 0.02213f
+C13 CLK_bar CLK 0.02266f
+C14 w_73_66# a_16_51# 0.02109f
+C15 storage_bar storage_bar_gnd 0.02903f
+C16 w_73_66# node1 0.00941f
+C17 w_116_66# storage 0.0093f
+C18 FF_in vdd 0.00161f
+C19 neg_storage_bar neg_storage_bar_vdd 0.00161f
+C20 w_n143_66# neg_node1 0.00941f
+C21 w_n100_66# neg_storage 0.0093f
+C22 neg_storage_bar_gnd gnd 0.13402f
+C23 neg_storage CLK_bar 0.0017f
+C24 storage vdd 0.00161f
+C25 w_158_66# storage 0.02109f
+C26 w_116_66# node1 0.00924f
+C27 neg_storage_bar_vdd a_16_51# 0.12374f
+C28 neg_storage_bar vdd 0.12374f
+C29 w_n2_69# CLK 0.02887f
+C30 w_n100_66# neg_node1 0.00924f
+C31 w_n58_66# neg_storage 0.02109f
+C32 CLK storage_bar_gnd 0.16762f
+C33 neg_storage CLK 0.00133f
+C34 FF_in gnd 0.05652f
+C35 neg_node1 CLK_bar 0.0017f
+C36 storage_bar FF_out 0.06056f
+C37 a_16_51# vdd 0.00161f
+C38 storage_bar_vdd FF_out 0.12374f
+C39 node1 vdd 0.12374f
+C40 neg_storage_bar neg_storage_bar_gnd 0.02903f
+C41 w_n143_66# vdd 0.03737f
+C42 storage gnd 0.05652f
+C43 FF_out CLK_bar 0
+C44 neg_node1 CLK 0.00133f
+C45 neg_storage_bar gnd 0.0825f
+C46 storage_bar vdd 0.12374f
+C47 a_16_51# neg_storage_bar_gnd 0.10175f
+C48 w_158_66# storage_bar 0.00941f
+C49 storage_bar_vdd vdd 0.16495f
+C50 a_16_51# gnd 0.08402f
+C51 node1 gnd 0.0825f
+C52 vdd CLK_bar 0.00242f
+C53 FF_out CLK 0
+C54 w_116_66# CLK 0.02666f
+C55 neg_storage_bar_vdd CLK 0.07901f
+C56 neg_storage neg_node1 0.28867f
+C57 w_214_69# storage_bar 0.02117f
+C58 w_214_69# storage_bar_vdd 0.04285f
+C59 storage_bar gnd 0.0825f
+C60 w_n58_66# vdd 0.03737f
+C61 w_n143_66# FF_in 0.02109f
+C62 neg_storage_bar_gnd CLK_bar 0.16762f
+C63 FF_out storage_bar_gnd 0.10175f
+C64 vdd CLK 0.00242f
+C65 w_214_69# CLK_bar 0.02887f
+C66 w_n2_69# neg_storage_bar_vdd 0.04285f
+C67 storage node1 0.28867f
+C68 neg_storage_bar a_16_51# 0.06056f
+C69 CLK_bar gnd 0.00266f
+C70 w_n2_69# vdd 0.02213f
+C71 storage_bar storage 0.0591f
+C72 a_16_51# node1 0.0591f
+C73 neg_storage vdd 0.00161f
+C74 CLK gnd 0.00266f
+C75 storage CLK_bar 0.00133f
+C76 w_73_66# vdd 0.03737f
+C77 neg_node1 vdd 0.12374f
+C78 storage_bar_gnd gnd 0.13402f
+C79 a_16_51# CLK_bar 0
+C80 neg_storage gnd 0.05652f
+C81 node1 CLK_bar 0.00133f
+C82 storage CLK 0.0017f
+C83 w_n58_66# neg_storage_bar 0.00941f
+C84 storage_bar storage_bar_vdd 0.00161f
+C85 neg_storage_bar_vdd vdd 0.16495f
+C86 storage_bar_gnd 0 0.09786f 
+C87 CLK 0 0.79857f 
+C88 CLK_bar 0 0.79857f 
+C89 neg_storage_bar_gnd 0 0.09786f 
+C90 vdd 0 0.36123f 
+C91 FF_out 0 0.17682f 
+C92 storage_bar_vdd 0 0.06462f 
+C93 node1 0 0.18855f 
+C94 storage 0 0.29649f 
+C95 storage_bar 0 0.39393f 
+C96 a_16_51# 0 0.39983f 
+C97 neg_storage_bar_vdd 0 0.06462f 
+C98 neg_node1 0 0.18855f 
+C99 neg_storage 0 0.29649f 
+C100 neg_storage_bar 0 0.39393f 
+C101 FF_in 0 0.23102f 
+C102 w_214_69# 0 1.43127f 
+C103 w_158_66# 0 0.57753f 
+C104 w_116_66# 0 0.52731f 
+C105 w_73_66# 0 0.57753f 
+C106 w_n2_69# 0 1.43127f 
+C107 w_n58_66# 0 0.57753f 
+C108 w_n100_66# 0 0.52731f 
+C109 w_n143_66# 0 0.57753f 

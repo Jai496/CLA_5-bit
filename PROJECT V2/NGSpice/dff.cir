@@ -1,0 +1,60 @@
+* Positive Edge D-Flip Flop (Topology: Extracted)
+* File: dff_pos.cir
+
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+
+* ==============================================================================
+* TOP LEVEL SUBCIRCUIT
+* ==============================================================================
+.subckt dff_pos D CLK Q vdd gnd N='20*LAMBDA'
+* Variables renamed to avoid 'ln' error
+.param Wid_n={N}
+.param Wid_p={2*N}
+.param Len_n={2*LAMBDA}
+.param Len_p={2*LAMBDA}
+
+* 1. Clock Gen
+Xclk_inv CLK CLK_bar vdd gnd inv Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+
+* 2. Input Buffer
+Xdin_inv D D_bar vdd gnd inv Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+
+* 3. Master Latch (TG = D_bar -> Master_Q)
+Xm_tg D_bar Master_Q CLK CLK_bar vdd gnd tgate Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+Xm_inv Master_Q Master_Qb vdd gnd inv Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+Xm_keep Master_Qb Master_Q CLK CLK_bar vdd gnd tristate_keeper Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+
+* 4. Intermediate Buffer (FIXED: Connected to Master_Q to remove inversion)
+Xmid_inv Master_Q Slave_In vdd gnd inv Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+
+* 5. Slave Latch (TG = Slave_In -> Slave_Q)
+Xs_tg Slave_In Slave_Q CLK_bar CLK vdd gnd tgate Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+Xs_inv Slave_Q Q_bar vdd gnd inv Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+Xs_keep Q_bar Slave_Q CLK_bar CLK vdd gnd tristate_keeper Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+
+* 6. Output Buffer
+Xq_inv Q_bar Q vdd gnd inv Wid_n={Wid_n} Wid_p={Wid_p} Len_n={Len_n} Len_p={Len_p}
+
+.ends dff_pos
+
+* ==============================================================================
+* COMPONENT SUBCIRCUITS
+* ==============================================================================
+
+.subckt inv in out vdd gnd Wid_n=1u Wid_p=2u Len_n=0.18u Len_p=0.18u
+M1 out in gnd gnd CMOSN W={Wid_n} L={Len_n} AS={5*Wid_n*LAMBDA} PS={10*LAMBDA+2*Wid_n} AD={5*Wid_n*LAMBDA} PD={10*LAMBDA+2*Wid_n}
+M2 out in vdd vdd CMOSP W={Wid_p} L={Len_p} AS={5*Wid_p*LAMBDA} PS={10*LAMBDA+2*Wid_p} AD={5*Wid_p*LAMBDA} PD={10*LAMBDA+2*Wid_p}
+.ends inv
+
+.subckt tgate in out ctrl_p ctrl_n vdd gnd Wid_n=1u Wid_p=2u Len_n=0.18u Len_p=0.18u
+M1 out ctrl_n in gnd CMOSN W={Wid_n} L={Len_n} AS={5*Wid_n*LAMBDA} PS={10*LAMBDA+2*Wid_n} AD={5*Wid_n*LAMBDA} PD={10*LAMBDA+2*Wid_n}
+M2 out ctrl_p in vdd CMOSP W={Wid_p} L={Len_p} AS={5*Wid_p*LAMBDA} PS={10*LAMBDA+2*Wid_p} AD={5*Wid_p*LAMBDA} PD={10*LAMBDA+2*Wid_p}
+.ends tgate
+
+.subckt tristate_keeper in out c_n c_p vdd gnd Wid_n=1u Wid_p=2u Len_n=0.18u Len_p=0.18u
+M1 n_mid_p in  vdd vdd CMOSP W={Wid_p} L={Len_p} AS={5*Wid_p*LAMBDA} PS={10*LAMBDA+2*Wid_p} AD={5*Wid_p*LAMBDA} PD={10*LAMBDA+2*Wid_p}
+M2 out     c_p n_mid_p vdd CMOSP W={Wid_p} L={Len_p} AS={5*Wid_p*LAMBDA} PS={10*LAMBDA+2*Wid_p} AD={5*Wid_p*LAMBDA} PD={10*LAMBDA+2*Wid_p}
+M3 out     c_n n_mid_n gnd CMOSN W={Wid_n} L={Len_n} AS={5*Wid_n*LAMBDA} PS={10*LAMBDA+2*Wid_n} AD={5*Wid_n*LAMBDA} PD={10*LAMBDA+2*Wid_n}
+M4 n_mid_n in  gnd     gnd CMOSN W={Wid_n} L={Len_n} AS={5*Wid_n*LAMBDA} PS={10*LAMBDA+2*Wid_n} AD={5*Wid_n*LAMBDA} PD={10*LAMBDA+2*Wid_n}
+.ends tristate_keeper

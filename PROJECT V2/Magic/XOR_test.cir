@@ -1,0 +1,79 @@
+* XOR Gate Testbench - TSMC 180nm (WORKING VERSION)
+.include TSMC_180nm.txt
+* Power supply
+Vdd vdd 0 DC 1.8
+.option scale=90n
+
+
+M1000 gnd B_bar a_3289_731# Gnd CMOSN w=12 l=2
++  ad=60p pd=34u as=48p ps=20u
+M1001 out B a_3261_731# Gnd CMOSN w=12 l=2
++  ad=60p pd=34u as=48p ps=20u
+M1002 a_3261_784# B_bar out w_3248_778# CMOSP w=24 l=2
++  ad=0.12n pd=58u as=96p ps=32u
+M1003 B_bar B gnd Gnd CMOSN w=6 l=2
++  ad=30p pd=22u as=30p ps=22u
+M1004 a_3289_731# A_bar out Gnd CMOSN w=12 l=2
++  ad=48p pd=20u as=60p ps=34u
+M1005 a_3261_731# A gnd Gnd CMOSN w=12 l=2
++  ad=48p pd=20u as=60p ps=34u
+M1006 out A_bar a_3261_784# w_3248_778# CMOSP w=24 l=2
++  ad=96p pd=32u as=0.12n ps=58u
+M1007 B_bar B vdd w_3209_739# CMOSP w=12 l=2
++  ad=60p pd=34u as=60p ps=34u
+M1008 vdd B a_3261_784# w_3248_778# CMOSP w=24 l=2
++  ad=0.12n pd=58u as=96p ps=32u
+M1009 A_bar A gnd Gnd CMOSN w=6 l=2
++  ad=30p pd=22u as=30p ps=22u
+M1010 A_bar A vdd w_3209_794# CMOSP w=12 l=2
++  ad=60p pd=34u as=60p ps=34u
+M1011 a_3261_784# A vdd w_3248_778# CMOSP w=24 l=2
++  ad=96p pd=32u as=0.12n ps=58u
+C0 B_bar out 0.40641f
+C1 B_bar gnd 0.16527f
+C2 A_bar gnd 0.10634f
+C3 B_bar vdd 0.15122f
+C4 A_bar A 0.11011f
+C5 A_bar vdd 0.15122f
+C6 gnd out 0.13753f
+C7 vdd gnd 0.22136f
+C8 a_3261_784# out 0.44699f
+C9 a_3261_784# vdd 0.93009f
+C10 out 0 0.2296f 
+C11 B_bar 0 0.5299f 
+C12 a_3261_784# 0 0.11836f 
+C13 gnd 0 0.72443f 
+C14 B 0 1.61667f 
+C15 A_bar 0 0.54697f 
+C16 vdd 0 0.68753f 
+C17 A 0 1.34032f 
+C18 w_3209_739# 0 0.57853f 
+C19 w_3248_778# 0 2.27798f 
+C20 w_3209_794# 0 0.57853f 
+
+* Input signals (0 to 1.8V)
+Va A 0 PULSE(0 1.8 0n 0.1n 0.1n 19.9n 40n)
+Vb B 0 PULSE(0 1.8 0n 0.1n 0.1n 9.9n 20n)
+
+* Inverters for complementary signals - using explicit transistors
+* Inverter 1: A -> A_bar
+Minv1p A_bar A vdd vdd CMOSP w=4 l=2
+Minv1n A_bar A 0 0 CMOSN w=2 l=2
+
+* Inverter 2: B -> B_bar
+Minv2p B_bar B vdd vdd CMOSP w=4 l=2
+Minv2n B_bar B 0 0 CMOSN w=2 l=2
+
+* Define output node
+Rout a_3297_683 OUT 1
+
+* Transient analysis
+.tran 0.1n 80n
+
+* Output
+.control
+run
+plot v(A)+4 v(B)+2 v(OUT) title 'XOR Gate Timing Diagram'
+.endc
+
+.end

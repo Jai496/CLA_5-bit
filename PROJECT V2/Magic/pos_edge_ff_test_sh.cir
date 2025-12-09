@@ -1,0 +1,61 @@
+* Setup and Hold Testbench for Extracted Netlist
+* Author: Jai Srikar 2024102041
+
+* 1. LOAD EXTRACTED NETLIST
+.include TSMC_180nm.txt
+.include pos_edge_ff.spice
+
+* 2. PARAMETERS
+.param LAMBDA=0.09u
+.param VDD_VAL=1.8V
+.param RISE_FALL=0.05ns
+.param VREF=0.9V
+
+* 3. GROUNDING
+* (Uncomment these if your simulation floats/fails. Highly recommended.)
+* Vgnd_1 gnd 0 0
+* Vgnd_2 Gnd 0 0
+
+* 4. SOURCES
+Vddsrc vdd 0 DC {VDD_VAL}
+
+* CLOCK: Rises at 10ns.
+* We drive both CLK and CLK_bar for the extraction.
+Vclk    CLK     0 PULSE(0 {VDD_VAL} 10ns {RISE_FALL} {RISE_FALL} 10ns 20ns)
+Vclkbar CLK_bar 0 PULSE({VDD_VAL} 0 10ns {RISE_FALL} {RISE_FALL} 10ns 20ns)
+
+* DATA: Your Requested Pattern
+* Rises at 0.05ns (Setup Check: 10ns before Clock)
+* Falls at 17.05ns (Hold Check: 7ns after Clock)
+Vin FF_in 0 PWL(
++ 0ns     0
++ 0.05ns  {VDD_VAL}
++ 17ns    {VDD_VAL}
++ 17.05ns 0
+)
+
+* Output Load & Init
+Cload FF_out 0 20f
+.ic v(FF_out)=0
+
+* 5. ANALYSIS
+.tran 0.01n 40n
+
+* 6. MEASUREMENTS
+
+* SETUP TIME
+* Trigger: FF_in Rising (0.05ns). Target: CLK Rising (10ns).
+* Expected: ~9.95ns
+.measure tran T_Setup TRIG v(FF_in) VAL={VREF} RISE=1 TARG v(CLK) VAL={VREF} RISE=1
+
+* HOLD TIME
+* Trigger: CLK Rising (10ns). Target: FF_in Falling (17.05ns).
+* Expected: ~7.05ns
+.measure tran T_Hold TRIG v(CLK) VAL={VREF} RISE=1 TARG v(FF_in) VAL={VREF} FALL=1
+
+.control
+run
+plot v(CLK)+4 v(FF_in)+2 v(FF_out) title 'Jai Srikar M 2024102041 DFF Post Layout Setup and Hold times'
+print T_Setup T_Hold
+.endc
+.end

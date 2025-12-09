@@ -1,0 +1,47 @@
+$date
+	Wed Nov 19 23:25:21 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module pg_tb $end
+$var wire 1 ! P $end
+$var wire 1 " G $end
+$var reg 1 # A $end
+$var reg 1 $ B $end
+$scope module uut $end
+$var wire 1 # A $end
+$var wire 1 $ B $end
+$var wire 1 " G $end
+$var wire 1 ! P $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+0$
+0#
+0"
+0!
+$end
+#10000
+1!
+1$
+#20000
+0$
+1#
+#30000
+1"
+0!
+1$
+#40000
+0"
+0$
+0#
+#50000

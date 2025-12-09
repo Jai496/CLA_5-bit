@@ -1,0 +1,34 @@
+* Dynamic Carry Chain Logic
+* Author: Jai Srikar M 2024102041
+
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param W_N = 20 * LAMBDA
+.param W_P = 2 * W_N
+
+* --- TOPMOST PMOS ---
+M1 C_out CLK VDD VDD CMOSP W={W_P} L={LAMBDA}
++ AS={5*W_P*LAMBDA} PS={10*LAMBDA+2*W_P} AD={5*W_P*LAMBDA} PD={10*LAMBDA+2*W_P}
+
+* --- LOWERMOST NMOS ---
+M2 n_eval CLK GND GND CMOSN W={W_N} L={LAMBDA}
++ AS={5*W_N*LAMBDA} PS={10*LAMBDA+2*W_N} AD={5*W_N*LAMBDA} PD={10*LAMBDA+2*W_N}
+
+* --- Pull-Down Logic  ---
+M3 C_out G n_eval GND CMOSN W={W_N} L={LAMBDA}
++ AS={5*W_N*LAMBDA} PS={10*LAMBDA+2*W_N} AD={5*W_N*LAMBDA} PD={10*LAMBDA+2*W_N}
+
+M4 C_out P n_c_in GND CMOSN W={W_N} L={LAMBDA}
++ AS={5*W_N*LAMBDA} PS={10*LAMBDA+2*W_N} AD={5*W_N*LAMBDA} PD={10*LAMBDA+2*W_N}
+
+M5 n_c_in C_in n_eval GND CMOSN W={W_N} L={LAMBDA}
++ AS={5*W_N*LAMBDA} PS={10*LAMBDA+2*W_N} AD={5*W_N*LAMBDA} PD={10*LAMBDA+2*W_N}
+
+* -----Output Buffer ----
+M6 C_out_domino C_out VDD VDD CMOSP W={W_P} L={LAMBDA}
++ AS={5*W_P*LAMBDA} PS={10*LAMBDA+2*W_P} AD={5*W_P*LAMBDA} PD={10*LAMBDA+2*W_P}
+M7 C_out_domino C_out 0 0 CMOSN W={W_N} L={LAMBDA}
++ AS={5*W_N*LAMBDA} PS={10*LAMBDA+2*W_N} AD={5*W_N*LAMBDA} PD={10*LAMBDA+2*W_N}
+
+C_internal C_out 0 1fF
+C_external C_out_domino 0 1fF

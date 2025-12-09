@@ -1,0 +1,127 @@
+* Comprehensive Testbench for Negative Latch
+* Tests all edge cases and timing scenarios
+
+.include TSMC_180nm.txt
+.option scale=90n
+
+* Power supply
+Vdd vdd 0 DC 1.8
+
+* Clock: 20ns period (10ns HIGH, 10ns LOW)
+Vclk CLK 0 PULSE(0 1.8 0n 0.1n 0.1n 9.8n 20n)
+
+* Clock_bar: Inverted clock
+Vclk_bar CLK_bar 0 PULSE(1.8 0 0n 0.1n 0.1n 9.8n 20n)
+
+*=================================================================
+* TEST PATTERN 1: Rapid Toggle Test
+* Tests if latch captures quick input changes
+*=================================================================
+Vin in 0 PWL(
++ 0n 0
++ 5n 0 5.1n 1.8
++ 10n 1.8 10.1n 0
++ 15n 0 15.1n 1.8
++ 25n 1.8 25.1n 0
++ 30n 0 30.1n 1.8
++ 35n 1.8 35.1n 0
++ 45n 0 45.1n 1.8
++ 50n 1.8 50.1n 0
++ 55n 0 55.1n 1.8
++ 65n 1.8 65.1n 0
++ 70n 0 70.1n 1.8
++ 75n 1.8 75.1n 0
++ 85n 0 85.1n 1.8
++ 95n 1.8 95.1n 0
++ 100n 0
++ )
+
+*=================================================================
+* Latch Transistors
+*=================================================================
+M1000 vdd CLK storage_bar_vdd vdd CMOSP w=8 l=2 ad=40p pd=26u as=40p ps=26u
+M1001 out_bar storage_bar storage_bar_vdd vdd CMOSP w=8 l=2 ad=40p pd=26u as=40p ps=26u
+M1002 node1 in 0 0 CMOSN w=4 l=2 ad=20p pd=18u as=20p ps=18u
+M1003 node1 in vdd vdd CMOSP w=8 l=2 ad=40p pd=26u as=40p ps=26u
+M1004 storage_bar storage 0 0 CMOSN w=4 l=2 ad=20p pd=18u as=20p ps=18u
+M1005 0 CLK_bar storage_bar_gnd 0 CMOSN w=4 l=2 ad=20p pd=18u as=20p ps=18u
+M1006 out out_bar vdd vdd CMOSP w=8 l=2 ad=40p pd=26u as=40p ps=26u
+M1007 storage_bar storage vdd vdd CMOSP w=8 l=2 ad=40p pd=26u as=40p ps=26u
+M1008 out out_bar 0 0 CMOSN w=4 l=2 ad=20p pd=18u as=20p ps=18u
+M1009 storage CLK node1 0 CMOSN w=4 l=2 ad=20p pd=18u as=20p ps=18u
+M1010 storage CLK_bar node1 vdd CMOSP w=8 l=2 ad=40p pd=26u as=40p ps=26u
+M1011 out_bar storage_bar storage_bar_gnd 0 CMOSN w=4 l=2 ad=20p pd=18u as=20p ps=18u
+
+Rfeedback out_bar storage 0.01
+
+*=================================================================
+* Parasitic Capacitances
+*=================================================================
+C0 vdd storage 0.00161f
+C1 storage_bar 0 0.0825f
+C2 CLK node1 0.00133f
+C3 vdd storage_bar 0.12374f
+C6 node1 0 0.0825f
+C7 out_bar 0 0.08402f
+C8 vdd node1 0.12374f
+C9 CLK_bar storage 0.0017f
+C10 out_bar vdd 0.00161f
+C13 out_bar out 0.0591f
+C14 CLK vdd 0.00242f
+C15 CLK_bar node1 0.0017f
+C16 storage_bar_gnd storage_bar 0.02903f
+C20 out 0 0.0825f
+C21 storage_bar_vdd storage_bar 0.0017f
+C24 vdd out 0.12374f
+C25 out_bar storage_bar_gnd 0.10175f
+C26 CLK CLK_bar 0.01133f
+C27 CLK_bar 0 0.00266f
+C28 storage_bar_vdd out_bar 0.13749f
+C32 storage_bar_gnd 0 0.13402f
+C33 storage storage_bar 0.0591f
+C34 in node1 0.0591f
+C35 storage_bar_vdd CLK 0.10964f
+C37 storage node1 0.28867f
+C38 storage_bar_vdd vdd 0.16495f
+C42 in 0 0.05652f
+C43 vdd in 0.00161f
+C44 out_bar storage_bar 0.06007f
+C45 CLK storage 0.00133f
+C47 CLK_bar storage_bar_gnd 0.16762f
+C49 storage 0 0.05652f
+
+Cload out 0 50f
+
+*=================================================================
+* Simulation
+*=================================================================
+.tran 0.05n 120n
+
+.control
+run
+
+echo " "
+echo "=========================================================="
+echo "  COMPREHENSIVE LATCH TEST - RAPID TOGGLE PATTERN       "
+echo "=========================================================="
+echo " "
+echo "Test Pattern: Input toggles every 5ns"
+echo "Expected: Output should only change on CLK falling edges"
+echo "         (at t = 0, 20, 40, 60, 80, 100ns)"
+echo " "
+echo "CRITICAL CHECKS:"
+echo "1. Output changes ONLY when CLK falls (not during CLK HIGH)"
+echo "2. Output holds steady during CLK HIGH periods"
+echo "3. No glitches or intermediate values"
+echo "4. Clean transitions"
+echo "=========================================================="
+
+plot v(CLK)+6 v(in)+3 v(out) xlimit 0 120n
+
+echo " "
+echo "Press 'q' to continue to next test..."
+echo " "
+
+.endc
+
+.end

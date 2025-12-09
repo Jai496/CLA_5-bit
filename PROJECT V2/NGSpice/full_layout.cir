@@ -1,0 +1,367 @@
+*  5-bit Manchester Carry Look-Ahead Adder
+*  Author  : Jai Srikar M (2024102041)
+
+.include TSMC_180nm.txt
+
+.param SUPPLY=1.8            
+.param LAMBDA=0.09u          
+.param width_N={15*20*LAMBDA}
+.param width_P={2.5*20*LAMBDA}
+.global gnd vdd
+vdd vdd gnd 1.8
+
+.param Ton=5n                   
+.param Tperiod={2*Ton}          
+
+.param t1=40n
+.param t2=80n
+.param t3=120n
+.param t4=160n
+
+* Input A - bit 1 (LSB)
+V_q_a1 q_a1 0 pwl(
++ 0n 1.8     {t1} 1.8
++ {t1} 1.8   {t2} 1.8
++ {t2} 0     {t3} 0
++ {t3} 0     {t4} 0
++ )
+
+* Input A - bit 2
+V_q_a2 q_a2 0 pwl(
++ 0n 1.8     {t1} 1.8
++ {t1} 1.8   {t2} 1.8
++ {t2} 1.8   {t3} 1.8
++ {t3} 0     {t4} 0
++ )
+
+* Input A - bit 3
+V_q_a3 q_a3 0 pwl(
++ 0n 0       {t1} 0
++ {t1} 1.8   {t2} 1.8
++ {t2} 0     {t3} 0
++ {t3} 1.8   {t4} 1.8
++ )
+
+* Input A - bit 4
+V_q_a4 q_a4 0 pwl(
++ 0n 0       {t1} 0
++ {t1} 1.8   {t2} 1.8
++ {t2} 1.8   {t3} 1.8
++ {t3} 1.8   {t4} 1.8
++ )
+
+* Input A - bit 5 (MSB)
+V_q_a5 q_a5 0 pwl(
++ 0n 0       {t1} 0
++ {t1} 1.8   {t2} 1.8
++ {t2} 0     {t3} 0
++ {t3} 1.8   {t4} 1.8
++ )
+
+* Input B - bit 1 (LSB)
+V_q_b1 q_b1 0 pwl(
++ 0n 1.8     {t1} 1.8
++ {t1} 1.8   {t2} 1.8
++ {t2} 0     {t3} 0
++ {t3} 0     {t4} 0
++ )
+
+* Input B - bit 2
+V_q_b2 q_b2 0 pwl(
++ 0n 0       {t1} 0
++ {t1} 1.8   {t2} 1.8
++ {t2} 1.8   {t3} 1.8
++ {t3} 0     {t4} 0
++ )
+
+* Input B - bit 3
+V_q_b3 q_b3 0 pwl(
++ 0n 1.8     {t1} 1.8
++ {t1} 1.8   {t2} 1.8
++ {t2} 1.8   {t3} 1.8
++ {t3} 1.8   {t4} 1.8
++ )
+
+* Input B - bit 4
+V_q_b4 q_b4 0 pwl(
++ 0n 0       {t1} 0
++ {t1} 0     {t2} 0
++ {t2} 1.8   {t3} 1.8
++ {t3} 1.8   {t4} 1.8
++ )
+
+* Input B - bit 5 (MSB)
+V_q_b5 q_b5 0 pwl(
++ 0n 0       {t1} 0
++ {t1} 0     {t2} 0
++ {t2} 0     {t3} 0
++ {t3} 1.8   {t4} 1.8
++ )
+
+* Input carry (Cin) stimulus - called carry_0 in netlist
+V_carry_0 carry_0 0 pwl(
++ 0n 0       {t3} 0
++ {t3} 1.8   {t4} 1.8
++ )
+
+V_clk clk_org 0 pulse(0 1.8 0 0 0 {Ton} {Tperiod})
+
+*------------------------------------------------------------------------------
+* Inverter subcircuit - small inverter cell used throughout the netlist
+*------------------------------------------------------------------------------
+.subckt inv x y vdd gnd N='a'
+.param width_Nn={N}
+.param width_Pp={2*width_Nn}
+
+M1 y x gnd gnd CMOSN W={width_Nn} L={2*LAMBDA}
++ AS={5*width_Nn*LAMBDA} PS={10*LAMBDA+2*width_Nn} 
++ AD={5*width_Nn*LAMBDA} PD={10*LAMBDA+2*width_Nn}
+
+M2 y x vdd vdd CMOSP W={width_Pp} L={2*LAMBDA}
++ AS={5*width_Pp*LAMBDA} PS={10*LAMBDA+2*width_Pp} 
++ AD={5*width_Pp*LAMBDA} PD={10*LAMBDA+2*width_Pp}
+.ends inv
+
+*------------------------------------------------------------------------------
+* XOR Gate subcircuit 
+* Ports: in_a in_b out vdd gnd
+*------------------------------------------------------------------------------
+.subckt Xor_gate in_a in_b out vdd gnd N='a'
+.param width_nnn={N}
+.param width_ppp={2*N}
+
+x_inv in_b in_bbar vdd gnd inv N={N}
+
+M1 out in_b in_a vdd CMOSP W={width_ppp} L={2*LAMBDA}
++ AS={5*width_ppp*LAMBDA} PS={10*LAMBDA+2*width_ppp} 
++ AD={5*width_ppp*LAMBDA} PD={10*LAMBDA+2*width_ppp}
+
+M2 out in_bbar in_a gnd CMOSN W={width_nnn} L={2*LAMBDA}
++ AS={5*width_nnn*LAMBDA} PS={10*LAMBDA+2*width_nnn} 
++ AD={5*width_nnn*LAMBDA} PD={10*LAMBDA+2*width_nnn}
+
+M3 out in_a in_bbar gnd CMOSN W={width_nnn} L={2*LAMBDA}
++ AS={5*width_nnn*LAMBDA} PS={10*LAMBDA+2*width_nnn} 
++ AD={5*width_nnn*LAMBDA} PD={10*LAMBDA+2*width_nnn}
+
+M4 out in_a in_b vdd CMOSP W={width_ppp} L={2*LAMBDA}
++ AS={5*width_ppp*LAMBDA} PS={10*LAMBDA+2*width_ppp} 
++ AD={5*width_ppp*LAMBDA} PD={10*LAMBDA+2*width_ppp}
+.ends Xor_gate
+
+*------------------------------------------------------------------------------
+* AND Gate implemented with pass-transistor style 
+* Ports: in_a in_b out vdd gnd
+*------------------------------------------------------------------------------
+.subckt And_ptl in_a in_b out vdd gnd N='a'
+.param width_nnnn={N}
+.param width_pppp={2*width_nnnn}
+
+* internal inverter to generate in_bbar
+x_inv in_b in_bbar vdd gnd inv N={N}
+
+* Pass transistor style AND with a restoration path
+M1 out in_b in_a gnd CMOSN W={width_nnnn} L={2*LAMBDA}
++ AS={5*width_nnnn*LAMBDA} PS={10*LAMBDA+2*width_nnnn} 
++ AD={5*width_nnnn*LAMBDA} PD={10*LAMBDA+2*width_nnnn}
+
+M2 out in_bbar in_a vdd CMOSP W={width_pppp} L={2*LAMBDA}
++ AS={5*width_pppp*LAMBDA} PS={10*LAMBDA+2*width_pppp} 
++ AD={5*width_pppp*LAMBDA} PD={10*LAMBDA+2*width_pppp}
+
+M3 out in_bbar gnd gnd CMOSN W={width_nnnn} L={2*LAMBDA}
++ AS={5*width_nnnn*LAMBDA} PS={10*LAMBDA+2*width_nnnn} 
++ AD={5*width_nnnn*LAMBDA} PD={10*LAMBDA+2*width_nnnn}
+.ends And_ptl
+
+*------------------------------------------------------------------------------
+* Propagate (P = A xor B) and Generate (G = A & B) 
+*------------------------------------------------------------------------------
+x_prop1 q_a1 q_b1 prop_1 vdd gnd Xor_gate N='15*LAMBDA'
+x_prop2 q_a2 q_b2 prop_2 vdd gnd Xor_gate N='15*LAMBDA'
+x_prop3 q_a3 q_b3 prop_3 vdd gnd Xor_gate N='15*LAMBDA'
+x_prop4 q_a4 q_b4 prop_4 vdd gnd Xor_gate N='15*LAMBDA'
+x_prop5 q_a5 q_b5 prop_5 vdd gnd Xor_gate N='15*LAMBDA'
+
+x_propbuf1 prop_1 prop_1_b vdd gnd inv N='20*LAMBDA'
+x_propbuf2 prop_2 prop_2_b vdd gnd inv N='20*LAMBDA'
+x_propbuf3 prop_3 prop_3_b vdd gnd inv N='20*LAMBDA'
+x_propbuf4 prop_4 prop_4_b vdd gnd inv N='20*LAMBDA'
+x_propbuf5 prop_5 prop_5_b vdd gnd inv N='20*LAMBDA'
+
+x_gen1 q_a1 q_b1 gen_1 vdd gnd And_ptl N='15*LAMBDA'
+x_gen2 q_a2 q_b2 gen_2 vdd gnd And_ptl N='15*LAMBDA'
+x_gen3 q_a3 q_b3 gen_3 vdd gnd And_ptl N='15*LAMBDA'
+x_gen4 q_a4 q_b4 gen_4 vdd gnd And_ptl N='15*LAMBDA'
+x_gen5 q_a5 q_b5 gen_5 vdd gnd And_ptl N='15*LAMBDA'
+
+x_genbuf1 gen_1 gen_1_b vdd gnd inv N='20*LAMBDA'
+x_genbuf2 gen_2 gen_2_b vdd gnd inv N='20*LAMBDA'
+x_genbuf3 gen_3 gen_3_b vdd gnd inv N='20*LAMBDA'
+x_genbuf4 gen_4 gen_4_b vdd gnd inv N='20*LAMBDA'
+x_genbuf5 gen_5 gen_5_b vdd gnd inv N='20*LAMBDA'
+
+x_clk_buf clk_org clock_in vdd gnd inv N='20*LAMBDA'
+
+*------------------------------------------------------------------------------
+* Manchester Carry Chain (C1..C5) using cascaded domino logic
+*------------------------------------------------------------------------------
+* Carry 1: C1 = G1 + P1 · C0
+Mp1 pdr1 clock_in vdd vdd CMOSP W={width_P} L={2*LAMBDA}
+Mn1 pdr1 gen_1_b n1_a gnd CMOSN W={width_N} L={2*LAMBDA}          
+Mn2 n1_a clock_in gnd gnd CMOSN W={width_N} L={2*LAMBDA}
+Mn3 pdr1 prop_1_b n1_b gnd CMOSN W={width_N} L={2*LAMBDA}         
+Mn4 n1_b carry_0 n1_c gnd CMOSN W={width_N} L={2*LAMBDA}
+Mn5 n1_c clock_in gnd gnd CMOSN W={width_N} L={2*LAMBDA}
+x_c1_buf pdr1 c1 vdd gnd inv N='20*LAMBDA'
+
+* Carry 2: C2 = G2 + P2 · C1
+Mp2 pdr2 clock_in vdd vdd CMOSP W={width_P} L={2*LAMBDA}
+Mn6 pdr2 gen_2_b n2_a gnd CMOSN W={width_N} L={2*LAMBDA}         
+Mn7 n2_a clock_in gnd gnd CMOSN W={width_N} L={2*LAMBDA}
+Mn8 pdr2 prop_2_b pdr1 gnd CMOSN W={width_N} L={2*LAMBDA}        
+x_c2_buf pdr2 c2 vdd gnd inv N='20*LAMBDA'
+
+* Carry 3: C3 = G3 + P3 · C2
+Mp3 pdr3 clock_in vdd vdd CMOSP W={width_P} L={2*LAMBDA}
+Mn9 pdr3 gen_3_b n3_a gnd CMOSN W={width_N} L={2*LAMBDA}        
+Mn10 n3_a clock_in gnd gnd CMOSN W={width_N} L={2*LAMBDA}
+Mn11 pdr3 prop_3_b pdr2 gnd CMOSN W={width_N} L={2*LAMBDA}       
+x_c3_buf pdr3 c3 vdd gnd inv N='20*LAMBDA'
+
+* Carry 4: C4 = G4 + P4 · C3
+Mp4 pdr4 clock_in vdd vdd CMOSP W={width_P} L={2*LAMBDA}
+Mn12 pdr4 gen_4_b n4_a gnd CMOSN W={width_N} L={2*LAMBDA}        
+Mn13 n4_a clock_in gnd gnd CMOSN W={width_N} L={2*LAMBDA}
+Mn14 pdr4 prop_4_b pdr3 gnd CMOSN W={width_N} L={2*LAMBDA}       
+x_c4_buf pdr4 c4 vdd gnd inv N='20*LAMBDA'
+
+* Carry 5: C5 = G5 + P5 · C4 
+Mp5 pdr5 clock_in vdd vdd CMOSP W={width_P} L={2*LAMBDA}
+Mn15 pdr5 gen_5_b n5_a gnd CMOSN W={width_N} L={2*LAMBDA}        
+Mn16 n5_a clock_in gnd gnd CMOSN W={width_N} L={2*LAMBDA}
+Mn17 pdr5 prop_5_b pdr4 gnd CMOSN W={width_N} L={2*LAMBDA}       
+x_c5_buf pdr5 c5 vdd gnd inv N='20*LAMBDA'
+
+*------------------------------------------------------------------------------
+* Pos-edge triggered master-slave D flip-flop 
+* Subckt: pos_edge_ff_v2 FF_in CLK FF_out vdd gnd N='a'
+*------------------------------------------------------------------------------
+.subckt pos_edge_ff_v2 FF_in CLK FF_out vdd gnd N='a'
+.param width_n={N}
+.param width_p={2*N}
+
+x_clk_inv CLK CLK_bar vdd gnd inv N={N}
+
+M_neg_buf_n neg_node1 FF_in gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_neg_buf_p neg_node1 FF_in vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+
+M_neg_pass_n neg_storage CLK neg_node1 gnd CMOSN W={width_n} L={2*LAMBDA}
+M_neg_pass_p neg_storage CLK_bar neg_node1 vdd CMOSP W={width_p} L={2*LAMBDA}
+
+M_neg_fb1_n neg_storage_bar neg_storage gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_neg_fb1_p neg_storage_bar neg_storage vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+
+M_neg_fb2_gnd_n neg_storage_bar_gnd CLK_bar gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_neg_fb2_n neg_storage neg_storage_bar neg_storage_bar_gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_neg_fb2_p neg_storage neg_storage_bar neg_storage_bar_vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+M_neg_fb2_vdd_p neg_storage_bar_vdd CLK vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+
+x_neg_out_inv neg_storage_bar inter_signal vdd gnd inv N={N}
+
+M_pos_buf_n node1 inter_signal gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_pos_buf_p node1 inter_signal vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+
+M_pos_pass_n storage CLK_bar node1 gnd CMOSN W={width_n} L={2*LAMBDA}
+M_pos_pass_p storage CLK node1 vdd CMOSP W={width_p} L={2*LAMBDA}
+
+M_pos_fb1_n storage_bar storage gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_pos_fb1_p storage_bar storage vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+
+M_pos_fb2_gnd_n storage_bar_gnd CLK gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_pos_fb2_n storage storage_bar storage_bar_gnd gnd CMOSN W={width_n} L={2*LAMBDA}
+M_pos_fb2_p storage storage_bar storage_bar_vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+M_pos_fb2_vdd_p storage_bar_vdd CLK_bar vdd vdd CMOSP W={width_p} L={2*LAMBDA}
+
+x_pos_out_inv storage_bar FF_out vdd gnd inv N={N}
+
+.ends pos_edge_ff_v2
+
+x_clk_inv clock_in clock_org vdd gnd inv N='20*LAMBDA'
+
+*------------------------------------------------------------------------------
+* Sum generation: S_i = P_i XOR C_{i-1}
+*------------------------------------------------------------------------------
+x_sum1 prop_1_b carry_0 s1_comb vdd gnd Xor_gate N='15*LAMBDA'
+x_sum2 prop_2_b c1 s2_comb vdd gnd Xor_gate N='15*LAMBDA'
+x_sum3 prop_3_b c2 s3_comb vdd gnd Xor_gate N='15*LAMBDA'
+x_sum4 prop_4_b c3 s4_comb vdd gnd Xor_gate N='15*LAMBDA'
+x_sum5 prop_5_b c4 s5_comb vdd gnd Xor_gate N='15*LAMBDA'
+
+*------------------------------------------------------------------------------
+* Output registers
+*------------------------------------------------------------------------------
+x_ff_s1 s1_comb clock_in s1 vdd gnd pos_edge_ff_v2 N='30*LAMBDA'
+x_ff_s2 s2_comb clock_in s2 vdd gnd pos_edge_ff_v2 N='30*LAMBDA'
+x_ff_s3 s3_comb clock_in s3 vdd gnd pos_edge_ff_v2 N='30*LAMBDA'
+x_ff_s4 s4_comb clock_in s4 vdd gnd pos_edge_ff_v2 N='30*LAMBDA'
+x_ff_s5 s5_comb clock_in s5 vdd gnd pos_edge_ff_v2 N='30*LAMBDA'
+x_ff_c5 c5 clock_in cout vdd gnd pos_edge_ff_v2 N='30*LAMBDA'
+
+.tran 0.05n 160n
+
+.control
+    set hcopypscolor=1
+    set color0=black
+    set color1=blue
+
+    *================= DELAY MEASUREMENTS =====================*
+  
+    meas tran delay_carry TRIG v(carry_0) VAL=0.9 RISE=1 TARG v(c5) VAL=0.9 RISE=1
+    meas tran delay_s5    TRIG v(q_a5)    VAL=0.9 RISE=1 TARG v(s5_comb) VAL=0.9 RISE=1
+    meas tran t_clkq TRIG v(clock_in) VAL=0.9 RISE=1 TARG v(s5)       VAL=0.9 RISE=1
+    meas tran t_setup TRIG v(s5_comb) VAL=0.9 RISE=1 TARG v(clock_in) VAL=0.9 RISE=1
+    let Tpd = max(delay_carry, delay_s5)
+    let Tclk_min = Tpd + t_setup + t_clkq
+    let Fmax = 1/Tclk_min
+
+    print delay_carry delay_s5 t_clkq t_setup Tpd Tclk_min Fmax
+
+    echo "-------------------------------------------------------"
+    echo "   Delay Report for Manchester Carry Adder"
+    echo "-------------------------------------------------------"
+    echo "Carry Delay   = $delay_carry"
+    echo "Sum5 Delay    = $delay_s5"
+    echo "FF clk->Q     = $t_clkq"
+    echo "FF Setup Time = $t_setup"
+    echo "----------------------------------------"
+    echo "Critical Path Delay (Tpd) = $Tpd"
+    echo "Minimum Clock Period      = $Tclk_min"
+    echo "Maximum Clock Frequency   = $Fmax Hz"
+    echo "-------------------------------------------------------"
+    *=========================================================*
+
+    run
+
+    set curplottitle="CORRECTED 5-bit Manchester Carry Adder with Working Flip-Flops"
+
+    echo "**********************************************************"
+    echo "* 5-BIT MANCHESTER CARRY ADDER TEST CASES                *"
+    echo "**********************************************************"
+    echo "* Test 1 (0-40ns):   A=00011(3)  + B=00101(5)  + Cin=0 = 001000(8)   *"
+    echo "* Test 2 (40-80ns):  A=11111(31) + B=00111(7)  + Cin=0 = 100110(38)  *"
+    echo "* Test 3 (80-120ns): A=01010(10) + B=01110(14) + Cin=0 = 011000(24)  *"
+    echo "* Test 4 (120-160ns):A=11100(28) + B=11100(28) + Cin=1 = 111001(57)  *"
+    echo "**********************************************************"
+
+    * Plot the registered outputs (stacked vertical offsets for readability)
+    plot v(s1) v(s2)+2 v(s3)+4 v(s4)+6 v(s5)+8 v(cout)+10 v(clock_org)+12 \
+         xlabel "Time" ylabel "Voltage" title "All 5-bit Registered Outputs - CORRECTED"
+
+    * Plot combinational outputs (before registering)
+    plot v(s1_comb) v(s2_comb)+2 v(s3_comb)+4 v(s4_comb)+6 v(s5_comb)+8 v(c5)+10 v(clock_org)+12 \
+         xlabel "Time" ylabel "Voltage" title "All 5-bit Combinational Outputs"
+
+.endc
+
+.end

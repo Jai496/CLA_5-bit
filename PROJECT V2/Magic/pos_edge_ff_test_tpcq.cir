@@ -1,0 +1,68 @@
+* Ultimate Testbench for Extracted DFF
+* Handles Grounding, Clocks, and Tpcq
+* Technology: TSMC 180nm
+
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param VREF=0.9
+
+* ==========================================================
+* 1. LOAD EXTRACTED NETLIST
+* ==========================================================
+* Save your M-lines into 'pos_edge_ff.spice'
+.include pos_edge_ff.spice
+
+
+
+* ==========================================================
+* 3. POWER & CLOCKS
+* ==========================================================
+Vddsrc vdd 0 DC 1.8
+
+* DUAL CLOCKS: Mandatory because extraction has no inverter
+* CLK: Rises at 10ns.
+Vclk    CLK     0 PULSE(0 1.8 0n 0.1n 0.1n 10n 20n)
+* CLK_BAR: Inverse of CLK.
+Vclkbar CLK_bar 0 PULSE(1.8 0 0n 0.1n 0.1n 10n 20n)
+
+* ==========================================================
+* 4. DATA STIMULUS (Setup/Hold Safe)
+* ==========================================================
+* Toggle Data on the FALLING edge of clock (at 0ns, 20ns, etc.)
+* Clock rises at 10ns. Data is stable for 10ns before that.
+* This guarantees the Flip-Flop works if the silicon is good.
+Vin FF_in 0 PULSE(0 1.8 2n 0.1n 0.1n 20n 40n)
+
+* Output Load
+Cload FF_out 0 20f
+
+* Initial Condition (Force 0 start)
+.ic v(FF_out)=0
+
+* ==========================================================
+* 5. MEASUREMENTS (Tpcq)
+* ==========================================================
+.tran 0.01n 60n
+
+* Delay Rise (CLK 10ns -> Q Rise)
+.measure tran Tpcq_LH 
++ TRIG v(CLK) VAL={VREF} RISE=1 
++ TARG v(FF_out) VAL={VREF} RISE=1
+
+* Delay Fall (CLK 30ns -> Q Fall)
+.measure tran Tpcq_HL 
++ TRIG v(CLK) VAL={VREF} RISE=2 
++ TARG v(FF_out) VAL={VREF} FALL=1
+
+* Avg
+.measure tran Tpcq_Avg param='(Tpcq_LH + Tpcq_HL)/2'
+
+.control
+run
+* Plotting
+set color0=black
+set color1=white
+plot v(CLK)+4 v(FF_in)+2 v(FF_out) title 'Jai Srikar M 2024102041 Post Layout DFF Tpcq'
+print Tpcq_LH Tpcq_HL Tpcq_Avg
+.endc
+.end

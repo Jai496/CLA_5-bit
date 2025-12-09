@@ -1,0 +1,226 @@
+* ========================================
+* 5-Bit CLA Testbench - Systematic Verification (Clean Square Inputs)
+* ========================================
+.include TSMC_180nm.txt
+.include cla_without_FLIPFLOP's.spice
+.option scale=10n
+
+* ========================================
+* Power Supply
+* ========================================
+Vdd vdd 0 DC 1.8
+
+* ========================================
+* Clock Signal
+* HIGH = Precharge, LOW = Evaluate
+* 100ns period: 50ns HIGH (precharge), 50ns LOW (evaluate)
+* ========================================
+Vclk clk_org 0 PULSE(0 1.8 0n 1n 1n 49n 100n)
+
+* ========================================
+* Carry Input (fixed at 0 for standard addition)
+* ========================================
+Vc_in carry_0 0 DC 0
+
+* ========================================
+* Test Pattern 1 (0-200ns): Simple Addition
+* A = 00001 (1), B = 00001 (1), Expected Sum = 00010 (2), Cout = 0
+* ========================================
+* Test Pattern 2 (200-400ns): Medium Values
+* A = 01010 (10), B = 00101 (5), Expected Sum = 01111 (15), Cout = 0
+* ========================================
+* Test Pattern 3 (400-600ns): Overflow Test
+* A = 11111 (31), B = 00001 (1), Expected Sum = 00000 (0), Cout = 1
+* ========================================
+* Test Pattern 4 (600-800ns): All bits test
+* A = 10101 (21), B = 01010 (10), Expected Sum = 11111 (31), Cout = 0
+* ========================================
+
+* ========================================
+* INPUT A (5 bits: A5 A4 A3 A2 A1)
+* Pattern: 00001, 01010, 11111, 10101
+* ========================================
+
+* A1 (LSB): Pattern 1,0,1,1
+Va1 q_a1 0 PWL(
++ 0n 1.8
++ 200n 1.8
++ 200.01n 0
++ 400n 0
++ 400.01n 1.8
++ 800n 1.8
++ )
+
+* A2: Pattern 0,1,1,0
+Va2 q_a2 0 PWL(
++ 0n 0
++ 200n 0
++ 200.01n 1.8
++ 400n 1.8
++ 400.01n 1.8
++ 600n 1.8
++ 600.01n 0
++ 800n 0
++ )
+
+* A3: Pattern 0,0,1,1
+Va3 q_a3 0 PWL(
++ 0n 0
++ 400n 0
++ 400.01n 1.8
++ 800n 1.8
++ )
+
+* A4: Pattern 0,1,1,0
+Va4 q_a4 0 PWL(
++ 0n 0
++ 200n 0
++ 200.01n 1.8
++ 400n 1.8
++ 400.01n 1.8
++ 600n 1.8
++ 600.01n 0
++ 800n 0
++ )
+
+* A5 (MSB): Pattern 0,0,1,1
+Va5 q_a5 0 PWL(
++ 0n 0
++ 400n 0
++ 400.01n 1.8
++ 800n 1.8
++ )
+
+* ========================================
+* INPUT B (5 bits: B5 B4 B3 B2 B1)
+* Pattern: 00001, 00101, 00001, 01010
+* ========================================
+
+* B1 (LSB): Pattern 1,1,1,0
+Vb1 q_b1 0 PWL(
++ 0n 1.8
++ 600n 1.8
++ 600.01n 0
++ 800n 0
++ )
+
+* B2: Pattern 0,0,0,1
+Vb2 q_b2 0 PWL(
++ 0n 0
++ 600n 0
++ 600.01n 1.8
++ 800n 1.8
++ )
+
+* B3: Pattern 0,1,0,0
+Vb3 q_b3 0 PWL(
++ 0n 0
++ 200n 0
++ 200.01n 1.8
++ 400n 1.8
++ 400.01n 0
++ 800n 0
++ )
+
+* B4: Pattern 0,0,0,1
+Vb4 q_b4 0 PWL(
++ 0n 0
++ 600n 0
++ 600.01n 1.8
++ 800n 1.8
++ )
+
+* B5 (MSB): Pattern 0,0,0,0
+Vb5 q_b5 0 PWL(
++ 0n 0
++ 800n 0
++ )
+
+* ========================================
+* Load Capacitors (representing inverter loads)
+* ========================================
+Cload_s1 s1 0 50f
+Cload_s2 s2 0 50f
+Cload_s3 s3 0 50f
+Cload_s4 s4 0 50f
+Cload_s5 s5 0 50f
+Cload_cout cout 0 50f
+
+* ========================================
+* Simulation Control
+* ========================================
+.tran 0.1n 800n
+
+.control
+set hcopypscolor=1
+set color0=white
+set color1=blue
+
+run
+
+set curplottitle="5-bit CLA Without Flip-Flops - Test Results"
+
+echo "**********************************************************"
+echo "* 5-BIT CLA TEST PATTERNS (WITHOUT FLIP-FLOPS)           *"
+echo "**********************************************************"
+echo "* Test 1 (0-200ns):   A=00001(1)  + B=00001(1)  = 00010(2),  Cout=0  *"
+echo "* Test 2 (200-400ns): A=01010(10) + B=00101(5)  = 01111(15), Cout=0  *"
+echo "* Test 3 (400-600ns): A=11111(31) + B=00001(1)  = 00000(0),  Cout=1  *"
+echo "* Test 4 (600-800ns): A=10101(21) + B=01010(10) = 11111(31), Cout=0  *"
+echo "**********************************************************"
+
+* ========================================
+* INPUT PATTERNS OVERVIEW
+* ========================================
+plot v(q_a5)+10 v(q_a4)+8 v(q_a3)+6 v(q_a2)+4 v(q_a1)+2 v(clock_in) xlabel "Time (ns)" ylabel "Voltage (V)" title "Input A Signals and Clock"
+
+plot v(q_b5)+10 v(q_b4)+8 v(q_b3)+6 v(q_b2)+4 v(q_b1)+2 v(clock_in) xlabel "Time (ns)" ylabel "Voltage (V)" title "Input B Signals and Clock"
+
+* ========================================
+* * PROPAGATE AND GENERATE SIGNALS
+* * ========================================
+* plot v(prop_1) v(prop_2)+2 v(prop_3)+4 v(prop_4)+6 v(prop_5)+8 10+v(clock_in) xlabel "Time (ns)" ylabel "Voltage (V)" title "Propagate Signals (P1-P5)"
+
+* plot v(gen_1) v(gen_2)+2 v(gen_3)+4 v(gen_4)+6 v(gen_5)+8 10+v(clock_in) xlabel "Time (ns)" ylabel "Voltage (V)" title "Generate Signals (G1-G5)"
+
+* * ========================================
+* * DOMINO PRE-DISCHARGE NODES
+* * ========================================
+* plot v(pdr1)+10 v(pdr2)+8 v(pdr3)+6 v(pdr4)+4 v(pdr5)+2 v(clock_in) xlabel "Time (ns)" ylabel "Voltage (V)" title "Domino Pre-discharge Nodes (PDR1-PDR5)"
+
+* ========================================
+* CARRY CHAIN PROPAGATION
+* ========================================
+* plot v(carry_0) v(c1)+2 v(c2)+4 v(c3)+6 v(c4)+8 v(cout)+10 12+v(clock_in) xlabel "Time (ns)" ylabel "Voltage (V)" title "Carry Chain Signals (C0-Cout)"
+
+* ========================================
+* COMPLETE ADDER OUTPUT (Sum bits)
+* ========================================
+plot v(s5)+10 v(s4)+8 v(s3)+6 v(s2)+4 v(s1)+2 v(cout) 12+v(clock_in) xlabel "Time (ns)" ylabel "Voltage (V)" title "Complete Adder Output (S1-S5, Cout)"
+
+* ========================================
+* BIT 1 VERIFICATION
+* ========================================
+* plot v(q_a1) 2+v(q_b1) 4+v(prop_1) 6+v(carry_0) 8+v(s1) 10+v(clock_in) 12+v(gen_1) xlabel "Time (ns)" ylabel "Voltage (V)" title "Bit 1 Verification"
+
+* ========================================
+* BIT 2 VERIFICATION
+* ========================================
+* plot v(q_a2) 2+v(q_b2) 4+v(prop_2) 6+v(c1) 8+v(s2) 10+v(clock_in) 12+v(gen_2) xlabel "Time (ns)" ylabel "Voltage (V)" title "Bit 2 Verification"
+
+* ========================================
+* BIT 5 VERIFICATION
+* ========================================
+* plot v(q_a5) 2+v(q_b5) 4+v(prop_5) 6+v(c4) 8+v(s5) 10+v(clock_in) 12+v(gen_5) xlabel "Time (ns)" ylabel "Voltage (V)" title "Bit 5 Verification"
+
+* ========================================
+* CLOCK COMPARISON
+* ========================================
+* plot v(clock_in) v(clk_org)+2 xlabel "Time (ns)" ylabel "Voltage (V)" title "Clock Signal Comparison"
+
+echo "**********************************************************"
+echo "* Simulation Complete - Verify outputs match expected    *"
+echo "**********************************************************"
+
+.endc
+.end

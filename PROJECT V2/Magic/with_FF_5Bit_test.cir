@@ -1,0 +1,79 @@
+* Final 5-bit CLA Testbench with All Inputs
+* Author: Jai Srikar
+
+.include TSMC_180nm.txt
+.include test.spice
+
+* --- PARAMETERS ---
+.param LAMBDA=0.09u
+.param VDD_VAL=1.8V
+.param VREF=0.9V
+
+
+* --- POWER ---
+Vddsrc vdd 0 {VDD_VAL}
+
+* --- CLOCK ---
+* Period 20ns. Rising Edges at: 10ns, 30ns, 50ns.
+Vclk clock_in 0 PULSE(0 {VDD_VAL} 0ns 0.1ns 0.1ns 10ns 20ns)
+
+* --- INPUTS: A=5 (00101), B=3 (00011) ---
+* All inputs toggle at 5ns (Setup for 10ns Clock).
+
+* Input Bus A
+Va1 a1 0 0 ; 1
+Va2 a2 0 0                              ; 0
+Va3 a3 0 0 ; 1
+Va4 a4 0 0                              ; 0
+Va5 a5 0 PWL(0 0 5ns 0 5.1ns {VDD_VAL})                             ; 0
+
+* Input Bus B
+Vb1 b1 0 PWL(0 0 5ns 0 5.1ns {VDD_VAL}) ; 1
+Vb2 b2 0 PWL(0 0 5ns 0 5.1ns {VDD_VAL}) ; 1
+Vb3 b3 0 PWL(0 0 5ns 0 5.1ns {VDD_VAL})                             ; 0
+Vb4 b4 0 PWL(0 0 5ns 0 5.1ns {VDD_VAL})                              ; 0
+Vb5 b5 0 PWL(0 0 5ns 0 5.1ns {VDD_VAL})                             ; 0
+
+* --- OUTPUT LOADS ---
+Cload_s1 s1 0 10f
+Cload_s2 s2 0 10f
+Cload_s3 s3 0 10f
+Cload_s4 s4 0 10f
+Cload_s5 s5 0 10f
+Cload_co cout 0 10f
+
+* --- INITIAL CONDITION ---
+* Force S4 to 0 initially so we can clearly see the rise at 30ns
+.ic v(s4)=0
+
+* --- ANALYSIS ---
+.tran 0.01n 60n
+
+* --- MEASUREMENT (The Fix) ---
+* We measure Tpcq on the 2nd Clock Edge (30ns)
+* Trigger: Clock Rising (Count=2 means the 30ns edge)
+* Target:  S4 Rising (The result 8 appearing)
+
+.measure tran Tpcq_S4 
++ TRIG v(clock_in) VAL={VREF} RISE=2 
++ TARG v(s4)       VAL={VREF} RISE=1
+
+.control
+run
+set color0=black
+set color1=white
+
+* Plot 1: All A Inputs
+plot v(clock_in)+10 v(a5)+8 v(a4)+6 v(a3)+4 v(a2)+2 v(a1) title 'Input A (00101)'
+
+* Plot 2: All B Inputs
+plot v(clock_in)+10 v(b5)+8 v(b4)+6 v(b3)+4 v(b2)+2 v(b1) title 'Input B (00011)'
+
+* Plot 3: Tpcq Visualization
+* Shows Clock vs Result S4. 
+* Look at the edge at 30ns.
+plot v(clock_in)+12 v(cout)+10 v(s5)+8 v(s4)+6 v(s3)+4 v(s2)+2 v(s1) title 'Jai Srikar M 2024102041 Integrated 5 bit CLA Verification'
+
+print Tpcq_S4
+.endc
+.end
