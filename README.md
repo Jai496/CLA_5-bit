@@ -2,7 +2,6 @@
 
 A transistor-level implementation of a pipelined 5-bit Manchester Carry Lookahead (CLA) Adder designed in **TSMC 180 nm CMOS**. The project includes schematic design, physical layout, post-layout verification, and FPGA-based hardware validation.
 
----
 
 ## Features
 
@@ -13,7 +12,6 @@ A transistor-level implementation of a pipelined 5-bit Manchester Carry Lookahea
 - Post-layout parasitic extraction
 - FPGA validation with oscilloscope measurements
 
----
 
 ## Tools Used
 
@@ -23,7 +21,6 @@ A transistor-level implementation of a pipelined 5-bit Manchester Carry Lookahea
 - Xilinx Vivado
 - Oscilloscope
 
----
 
 ## Design Flow
 
@@ -36,7 +33,6 @@ A transistor-level implementation of a pipelined 5-bit Manchester Carry Lookahea
 7. Implemented design on FPGA
 8. Validated outputs using oscilloscope
 
----
 
 ## Results
 
@@ -46,7 +42,6 @@ A transistor-level implementation of a pipelined 5-bit Manchester Carry Lookahea
 |---------|-----------:|------------:|
 | Logic Delay | 70.7 ps | 78.6 ps |
 | Maximum Frequency | 3.69 GHz | 3.59 GHz |
-| Critical Path Delay | 270.8 ps | — |
 
 ### Hardware Validation
 
@@ -55,7 +50,6 @@ A transistor-level implementation of a pipelined 5-bit Manchester Carry Lookahea
 - Oscilloscope measurements confirmed timing behavior
 - Post-layout simulations closely matched schematic simulations
 
----
 
 
 ## Future Improvements
@@ -64,7 +58,6 @@ A transistor-level implementation of a pipelined 5-bit Manchester Carry Lookahea
 - Port to lower technology nodes
 - Perform power optimization
 
----
 
 ## Author
 
